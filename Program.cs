@@ -71,6 +71,24 @@ namespace photo_organizer
             CopyFile(file, newPath);
         }
 
+        private static void CreateDirectory(string path)
+        {
+            string newPath = Path.Combine(destinationPath, path);
+
+            try
+            {
+                if (Directory.Exists(newPath))
+                    return;
+
+                Directory.CreateDirectory(newPath);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Create directory failed: {0}", e.ToString());
+            }
+            finally { }
+        }
+        
         private static void CopyFile(string file, string newPath)
         {
             try
@@ -84,24 +102,6 @@ namespace photo_organizer
                 Console.WriteLine("Copy file failed: {0}", e.ToString());
             }
             finally { }
-        }
-
-        private static void CreateDirectory(string path)
-        {
-            string newPath = Path.Combine(destinationPath, path);
-
-            try
-            {
-                if (Directory.Exists(newPath))
-                    return;
-
-                DirectoryInfo newDirectory = Directory.CreateDirectory(newPath);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Create directory failed: {0}", e.ToString());
-            }
-            finally { }
-        }
+        }        
     }
 }
