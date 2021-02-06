@@ -57,7 +57,7 @@ namespace photo_organizer
 
         private static void ProcessFile(string file)
         {
-            DateTime dateFileCreated = File.GetLastWriteTime(file) < File.GetCreationTime(file) ? File.GetLastWriteTime(file) : File.GetCreationTime(file);
+            DateTime dateFileCreated = File.GetLastWriteTime(file) <= File.GetCreationTime(file) ? File.GetLastWriteTime(file) : File.GetCreationTime(file);
 
             string fullYear = dateFileCreated.Year.ToString();
             string year = dateFileCreated.Year.ToString().Substring(2, 2);
