@@ -8,6 +8,7 @@ namespace photo_organizer
         public const string originPath = @"C:\Pictures\Backup";
         public const string destinationPath = @"C:\Pictures\Photos Organizer";
         public static int filesCounter = 0;
+        
         public static void Main(string[] args)
         {
             StartProcess();
