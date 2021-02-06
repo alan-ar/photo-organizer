@@ -29,7 +29,7 @@ namespace photo_organizer
         {
             foreach (string file in path)
             {
-                if (File.Exists(file) && Path.GetExtension(file).ToString() != ".ini")
+                if (File.Exists(file))
                 {
                     ProcessFile(file);
                 }
