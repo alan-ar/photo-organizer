@@ -91,9 +91,11 @@ namespace photo_organizer
         
         private static void CopyFile(string file, string newPath)
         {
+            string newPath = Path.Combine(destinationPath, newPath, Path.GetFileName(file));
+            
             try
             {
-                File.Copy(file, Path.Combine(destinationPath, newPath, Path.GetFileName(file)), false);
+                File.Copy(file, newPath, true);
                 filesCounter++;
                 Console.WriteLine("{0}: {1}", filesCounter, file);
             }
