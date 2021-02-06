@@ -1,16 +1,19 @@
 ﻿using System;
 using System.IO;
-using System.Collections;
 
 namespace photo_organizer
 {
     class Program
     {
-        static string originPath = @"C:\Users\Alan\Pictures\";
-        static string destinationPath = @"C:\Users\Alan\Pictures\";
-        static int filesCounter = 0;
-
+        public const string originPath = @"C:\Pictures\Backup";
+        public const string destinationPath = @"C:\Pictures\Photos Organizer";
+        public static int filesCounter = 0;
         public static void Main(string[] args)
+        {
+            StartProcess();
+        }
+
+        private static void StartProcess()
         {
             string[] pathList = Directory.GetFiles(originPath);
             ProcessPath(pathList);
@@ -23,13 +26,13 @@ namespace photo_organizer
 
         private static void ProcessPath(string[] path)
         {
-            foreach(string file in path)
+            foreach (string file in path)
             {
-                if(File.Exists(file) && Path.GetExtension(file).ToString() == ".png")
+                if (File.Exists(file) && Path.GetExtension(file).ToString() != ".ini")
                 {
                     ProcessFile(file);
                 }
-                else if(Directory.Exists(file))
+                else if (Directory.Exists(file))
                 {
                     ProcessDirectory(file);
                 }
@@ -43,18 +46,18 @@ namespace photo_organizer
         private static void ProcessDirectory(string directory)
         {
             string[] fileList = Directory.GetFiles(directory);
-            foreach(string file in fileList)
+            foreach (string file in fileList)
                 ProcessFile(file);
 
             string[] folderList = Directory.GetDirectories(directory);
-            foreach(string folder in folderList)
+            foreach (string folder in folderList)
                 ProcessDirectory(folder);
         }
 
         private static void ProcessFile(string file)
         {
-            DateTime dateFileCreated = File.GetCreationTime(file); 
-            
+            DateTime dateFileCreated = File.GetLastWriteTime(file) < File.GetCreationTime(file) ? File.GetLastWriteTime(file) : File.GetCreationTime(file);
+
             string fullYear = dateFileCreated.Year.ToString();
             string year = dateFileCreated.Year.ToString().Substring(2, 2);
             string month = dateFileCreated.Month.ToString();
@@ -63,7 +66,7 @@ namespace photo_organizer
             string newPath = Path.Combine(fullYear, year + '.' + month, year + '.' + month + '.' + day);
 
             CreateDirectory(newPath);
-            
+
             CopyFile(file, newPath);
         }
 
@@ -71,15 +74,15 @@ namespace photo_organizer
         {
             try
             {
-                File.Copy(file, Path.Combine(destinationPath, newPath, Path.GetFileName(file)), true);
-                Console.WriteLine(file.ToString());
-                filesCounter += 1;
+                File.Copy(file, Path.Combine(destinationPath, newPath, Path.GetFileName(file)), false);
+                filesCounter++;
+                Console.WriteLine("{0}: {1}", filesCounter, file);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Copy file failed: {0}", e.ToString());
             }
-            finally {}
+            finally { }
         }
 
         private static void CreateDirectory(string path)
@@ -97,7 +100,7 @@ namespace photo_organizer
             {
                 Console.WriteLine("Create directory failed: {0}", e.ToString());
             }
-            finally {}
+            finally { }
         }
     }
 }
