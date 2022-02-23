@@ -5,10 +5,10 @@ namespace PhotoOrganizer
 {
     internal class Program
     {
-        public static string SourcePath { get; set; }
+        public static string[] duplicateFiles = { };
         public static string DestinationPath { get; set; }
         public static int FilesCounter { get; set; }
-        public static string[] duplicateFiles = { };
+        public static string SourcePath { get; set; }
 
         public static void Main(string[] args)
         {
@@ -22,47 +22,46 @@ namespace PhotoOrganizer
             Console.ReadKey(true);
         }
 
-        private static void StartProcess()
+        private static void CopyFile(string file, string path)
         {
             try
             {
-                string[] pathList = { };
+                string newPath = Path.Combine(DestinationPath, path, Path.GetFileName(file));
 
-                pathList = Directory.GetFiles(SourcePath);
-                ProcessPath(pathList);
+                File.Copy(file, newPath, false);
+                FilesCounter++;
+                Console.WriteLine("{0}: {1}", FilesCounter, file);
+            }
+            catch (Exception e)
+            {
+                if (e.ToString().Contains("already exists"))
+                {
+                    Array.Resize(ref duplicateFiles, duplicateFiles.Length + 1);
+                    duplicateFiles[duplicateFiles.GetUpperBound(0)] = file;
+                }
+                else
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            finally { }
+        }
 
-                pathList = Directory.GetDirectories(SourcePath);
-                ProcessPath(pathList);
-                
-                Console.WriteLine("Files successfully copied: {0} to {1}", FilesCounter, DestinationPath);
+        private static void CreateDirectory(string path)
+        {
+            try
+            {
+                string newPath = Path.Combine(DestinationPath, path);
+                if (!Directory.Exists(newPath))
+                {
+                    Directory.CreateDirectory(newPath);
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
             finally { }
-        }
-
-        private static void ProcessPath(string[] path)
-        {
-            foreach (string file in path)
-            {
-                if (File.Exists(file))
-                {
-                    ProcessFile(file);
-                }
-                else
-                {
-                    if (Directory.Exists(file))
-                    {
-                        ProcessDirectory(file);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid path: {0}", file);
-                    }
-                }
-            }
         }
 
         private static void ProcessDirectory(string directory)
@@ -102,46 +101,26 @@ namespace PhotoOrganizer
             }
         }
 
-        private static void CreateDirectory(string path)
+        private static void ProcessPath(string[] path)
         {
-            try
+            foreach (string file in path)
             {
-                string newPath = Path.Combine(DestinationPath, path);
-                if (!Directory.Exists(newPath))
+                if (File.Exists(file))
                 {
-                    Directory.CreateDirectory(newPath);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            finally { }
-        }
-
-        private static void CopyFile(string file, string path)
-        {
-            try
-            {
-                string newPath = Path.Combine(DestinationPath, path, Path.GetFileName(file));
-
-                File.Copy(file, newPath, false);
-                FilesCounter++;
-                Console.WriteLine("{0}: {1}", FilesCounter, file);
-            }
-            catch (Exception e)
-            {
-                if (e.ToString().Contains("already exists"))
-                {
-                    Array.Resize(ref duplicateFiles, duplicateFiles.Length + 1);
-                    duplicateFiles[duplicateFiles.GetUpperBound(0)] = file;
+                    ProcessFile(file);
                 }
                 else
                 {
-                    Console.WriteLine(e.Message);
+                    if (Directory.Exists(file))
+                    {
+                        ProcessDirectory(file);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid path: {0}", file);
+                    }
                 }
             }
-            finally { }
         }
 
         private static void ShowDuplicateFiles()
@@ -150,6 +129,27 @@ namespace PhotoOrganizer
             {
                 Console.WriteLine("File already exists: {0}", file);
             }
+        }
+
+        private static void StartProcess()
+        {
+            try
+            {
+                string[] pathList = { };
+
+                pathList = Directory.GetFiles(SourcePath);
+                ProcessPath(pathList);
+
+                pathList = Directory.GetDirectories(SourcePath);
+                ProcessPath(pathList);
+
+                Console.WriteLine("Files successfully copied: {0} to {1}", FilesCounter, DestinationPath);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally { }
         }
     }
 }
