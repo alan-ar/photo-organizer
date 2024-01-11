@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoOrganizerApp", "PhotoOrganizerApp\PhotoOrganizerApp.csproj", "{982A7EC0-2A4C-4737-B965-5B1D329FFB93}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{982A7EC0-2A4C-4737-B965-5B1D329FFB93}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{982A7EC0-2A4C-4737-B965-5B1D329FFB93}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{982A7EC0-2A4C-4737-B965-5B1D329FFB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{982A7EC0-2A4C-4737-B965-5B1D329FFB93}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8D6BABC9-0157-47D7-959B-5BB65B7CCB3B}
+	EndGlobalSection
+EndGlobal
